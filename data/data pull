@@ -1,0 +1,2 @@
+from utils import generate_synthetic_emr_data
+generate_synthetic_emr_data()
