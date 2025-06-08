@@ -1,0 +1,30 @@
+import streamlit as st
+import pandas as pd
+from model import load_and_train
+
+st.title("🏥 EMR Patient Readmission Predictor")
+
+model, acc = load_and_train()
+st.write(f"Model accuracy: {acc:.2f}")
+
+st.header("Input Patient Data")
+
+age = st.slider("Age", 30, 90, 50)
+gender = st.selectbox("Gender", ['Male', 'Female'])
+num_procedures = st.slider("Number of Procedures", 0, 5, 2)
+num_meds = st.slider("Number of Medications", 1, 20, 10)
+has_diabetes = st.selectbox("Diabetes", ['Yes', 'No']) == 'Yes'
+days_in_hospital = st.slider("Days in Hospital", 1, 14, 5)
+
+input_data = pd.DataFrame([{
+    "age": age,
+    "gender": 1 if gender == 'Male' else 0,
+    "num_procedures": num_procedures,
+    "num_medications": num_meds,
+    "has_diabetes": int(has_diabetes),
+    "days_in_hospital": days_in_hospital
+}])
+
+prediction = model.predict(input_data)[0]
+st.subheader("Prediction Result")
+st.write("✅ Likely **Not** Readmitted" if prediction == 0 else "⚠️ Likely to be **Readmitted**")
