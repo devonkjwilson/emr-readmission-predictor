@@ -1,0 +1,16 @@
+import pandas as pd
+import numpy as np
+
+def generate_synthetic_emr_data(n=1000):
+    np.random.seed(42)
+    data = pd.DataFrame({
+        'age': np.random.randint(30, 90, size=n),
+        'gender': np.random.choice(['Male', 'Female'], size=n),
+        'num_procedures': np.random.randint(0, 6, size=n),
+        'num_medications': np.random.randint(1, 20, size=n),
+        'has_diabetes': np.random.choice([0, 1], size=n),
+        'days_in_hospital': np.random.randint(1, 15, size=n),
+        'readmitted_30_days': np.random.choice([0, 1], size=n, p=[0.7, 0.3])
+    })
+    data.to_csv('data/patients.csv', index=False)
+    return data
